@@ -2,7 +2,10 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function EditEmployee() {
+function EditEmployee(props) {
+    const [name, setName] = useState(props.name);
+    const [role, setRole] = useState(props.role);
+
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -22,7 +25,12 @@ function EditEmployee() {
                     <Modal.Title>Update Employee</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form id='editmodal' className="w-full max-w-sm">
+                    <form onSubmit={(e) => {
+                        handleClose();
+                        e.preventDefault();
+                        props.updateEmployee(props.id, name, role);
+                    }}
+                    id='editmodal' className="w-full max-w-sm">
                         <div className="md:flex md:items-center mb-6">
                             <div className="md:w-1/3">
                                 <label className="block text-gray-500 font-bold 
@@ -38,7 +46,10 @@ function EditEmployee() {
                                 leading-tight focus:outline-none 
                                 focus:bg-white focus:border-purple-500"
                                     id="name" type="text"
-                                    value="Jane Doe" />
+                                value={name} 
+                                onChange={(e) => {
+                                    setName(e.target.value)}}
+                                />
                             </div>
                         </div>
                         <div className="md:flex md:items-center mb-6">
@@ -56,20 +67,24 @@ function EditEmployee() {
                                 leading-tight focus:outline-none 
                                 focus:bg-white focus:border-purple-500"
                                     id="role" type="text"
-                                    value="Jane Doe" />
+                                    value={role} 
+                                    onChange={(e) => {
+                                        setRole(e.target.value)}}
+                                    />
                             </div>
                         </div>
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button className='"flex-shrink-0 bg-teal-500 hover:bg-teal-700  
-                    text-white font-bold py-2 px-2 rounded"' 
+                    <button className="bg-slate-400 hover:bg-blue-700  
+                    text-white font-bold py-2 px-4 rounded"
                     onClick={handleClose}>
                         Close
-                    </Button>
+                    </button>
 
-                    <Button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded" 
-                    form="edirmodal">Update</Button>
+                    <button 
+                    className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" 
+                    form="editmodal">Update</button>
                 </Modal.Footer>
             </Modal>
         </>
